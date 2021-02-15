@@ -89,7 +89,7 @@ class SongDAO {
     }
 
     async delete(song) {
-        const client = DB.open();
+        const client = await DB.open();
         const result = await client.query(
             'DELETE FROM song WHERE song_id = $1 RETURNING *',
             [song.getId()]

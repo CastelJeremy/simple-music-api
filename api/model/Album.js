@@ -1,18 +1,26 @@
 class Album {
-    constructor(albumId, albumName, albumAuthor) {
-        this.album_id = albumId;
-        this.album_name = albumName;
-        this.album_author = albumAuthor;
+    constructor(id, name, author) {
+        this._id = id;
+        this._name = name;
+        this._author = author;
     }
 
-    setId(albumId) { this.album_id = albumId; }
-    getId() { return this.album_id; }
+    setId(id) { this._id = id; }
+    getId() { return this._id; }
 
-    setName(albumName) { this.album_name = albumName; }
-    getName() { return this.album_name; }
+    setName(name) { this._name = name; }
+    getName() { return this._name; }
 
-    setAuthor(albumAuthor) { this.album_author = albumAuthor; }
-    getAuthor() { return this.album_author; }
+    setAuthor(author) { this._author = author; }
+    getAuthor() { return this._author; }
+
+    toObject() {
+        return {
+            id: this._id,
+            name: this._name,
+            author: this._author,
+        }
+    }
 }
 
 export { Album }

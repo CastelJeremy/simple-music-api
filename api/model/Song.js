@@ -1,22 +1,31 @@
 class Song {
-    constructor(songId, album, songName, songLength) {
-        this.song_id = songId;
-        this.album = album;
-        this.song_name = songName;
-        this.song_length = songLength;
+    constructor(id, album, name, length) {
+        this._id = id;
+        this._album = album;
+        this._name = name;
+        this._length = length;
     }
 
-    setId(songId) { this.song_id = songId; }
-    getId() { return this.song_id; }
+    setId(id) { this._id = id; }
+    getId() { return this._id; }
 
-    setAlbum(album) { this.album = album; }
-    getAlbum() { return this.album; }
+    setAlbum(album) { this._album = album; }
+    getAlbum() { return this._album; }
 
-    setName(songName) { this.song_name = songName; }
-    getName() { return this.song_name; }
+    setName(name) { this._name = name; }
+    getName() { return this._name; }
 
-    setLength(songLength) { this.song_length = songLength; }
-    getLength() { return this.song_length; }
+    setLength(length) { this._length = length; }
+    getLength() { return this._length; }
+
+    toObject() {
+        return {
+            id: this._id,
+            album: this._album.toObject(),
+            name: this._song,
+            length: this._length
+        }
+    }
 }
 
 export { Song };

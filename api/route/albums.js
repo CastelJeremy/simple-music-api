@@ -12,13 +12,13 @@ albums
         const dao = new AlbumDAO();
         album = await dao.create(album);
 
-        res.json(album);
+        res.json(album.toObject());
     })
     .get(async function (req, res) {
         const dao = new AlbumDAO();
         let albums = await dao.getAll();
 
-        res.json(albums);
+        res.json(albums.map((album) => album.toObject()));
     });
 
 albums
@@ -27,7 +27,7 @@ albums
         const dao = new AlbumDAO();
         let album = await dao.get(req.params.album_id);
 
-        res.json(album);
+        res.json(album.toObject());
     })
     .put(async function (req, res) {
         let album = new Album(
@@ -39,7 +39,7 @@ albums
         const dao = new AlbumDAO();
         album = await dao.update(album);
 
-        res.json(album);
+        res.json(album.toObject());
     })
     .delete(async function (req, res) {
         let album = new Album(req.params.album_id, null, null);
@@ -47,7 +47,7 @@ albums
         const dao = new AlbumDAO();
         album = await dao.delete(album);
 
-        res.json(album);
+        res.json(album.toObject());
     });
 
 export { albums };
