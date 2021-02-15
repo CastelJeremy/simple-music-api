@@ -9,9 +9,9 @@ songs
     .route('/')
     .post(async function (req, res) {
         let dao = new AlbumDAO();
-        let album = await dao.get(req.params.album_id);
+        let album = await dao.get(req.body.album_id);
         console.log(album);
-        let song = new Song(null, album, req.params.name, req.params.length);
+        let song = new Song(null, album, req.body.name, req.body.length);
 
         dao = new SongDAO();
         song = await dao.create(song);
