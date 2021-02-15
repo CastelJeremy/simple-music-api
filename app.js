@@ -9,7 +9,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/', router);
+// app.use('/', router);
 app.use('/albums', albums);
 app.use('/songs', songs);
 
@@ -23,3 +23,5 @@ const server = app.listen('8000', '127.0.0.1', () => {
     const { address, port } = server.address();
     console.log(`Hello world app listening on port http://${address}:${port}!`);
 });
+
+export { app };
