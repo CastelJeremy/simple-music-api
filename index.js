@@ -1,13 +1,13 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import { router } from './api/router.js';
 import { albums } from './api/routes/albums.js';
 import { songs } from './api/routes/songs.js';
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use('/', router);
 app.use('/albums', albums);
 app.use('/songs', songs);
