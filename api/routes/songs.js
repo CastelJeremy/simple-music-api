@@ -1,8 +1,8 @@
 import express from 'express';
-import { Album } from '../model/Album.js';
-import { Song } from '../model/Song.js';
-import { AlbumDAO } from '../dao/AlbumDAO.js';
-import { SongDAO } from '../dao/SongDAO.js';
+import { Album } from '../schemas/Album.js';
+import { Song } from '../schemas/Song.js';
+import { AlbumDAO } from '../models/AlbumDAO.js';
+import { SongDAO } from '../models/SongDAO.js';
 
 const songs = express.Router();
 

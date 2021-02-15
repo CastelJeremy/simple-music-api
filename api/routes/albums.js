@@ -1,6 +1,6 @@
 import express from 'express';
-import { Album } from '../model/Album.js';
-import { AlbumDAO } from '../dao/AlbumDAO.js';
+import { Album } from '../schemas/Album.js';
+import { AlbumDAO } from '../models/AlbumDAO.js';
 
 const albums = express.Router();
 

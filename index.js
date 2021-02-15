@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { router } from './api/router.js';
-import { albums } from './api/route/albums.js';
-import { songs } from './api/route/songs.js';
+import { albums } from './api/routes/albums.js';
+import { songs } from './api/routes/songs.js';
 
 const app = express();
 

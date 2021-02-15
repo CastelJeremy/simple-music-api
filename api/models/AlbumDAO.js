@@ -1,5 +1,5 @@
 import { DB } from '../DB.js';
-import { Album } from '../model/Album.js';
+import { Album } from '../schemas/Album.js';
 
 class AlbumDAO {
     constructor() {}
