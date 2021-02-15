@@ -1,0 +1,28 @@
+{
+  "name": "simple-music-api",
+  "version": "1.0.0",
+  "description": "Lightweight JS API for testing purposes",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/casteljeremy/simple-music-api.git"
+  },
+  "author": "jeremy castel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/casteljeremy/simple-music-api/issues"
+  },
+  "homepage": "https://github.com/casteljeremy/simple-music-api#readme",
+  "dependencies": {
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
