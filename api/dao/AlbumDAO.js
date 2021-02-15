@@ -83,4 +83,4 @@ class AlbumDAO {
     }
 }
 
-export { AlbumDAO };
+export { AlbumDAO }
