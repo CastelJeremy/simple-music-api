@@ -75,7 +75,7 @@ songs
             );
 
         const albumDao = new AlbumDAO();
-        let album = albumDao.get(req.body.album.id);
+        let album = await albumDao.get(req.body.album.id);
 
         if (!album)
             return next(
