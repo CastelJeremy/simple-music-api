@@ -268,57 +268,58 @@ describe('API Songs', function () {
                     chai.expect(res).to.have.status(200);
                     chai.expect(res).to.be.an('object');
                     chai.expect(res.body).to.be.an('array');
+
                     done();
                 });
         });
     });
 
     describe('POST `/songs`', function () {
+        const album = {
+            id: null,
+            name: 'POST',
+            author: 'songs',
+        };
+
+        const song = {
+            id: null,
+            album: null,
+            name: 'POST',
+            length: 200,
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+            song.album = album;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/songs/' + song.id);
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return a song', (done) => {
-            /** First insert a new album */
             chai.request(app)
-                .post('/albums')
-                .send({ name: '********* - Volume Beta', author: 'C418' })
+                .post('/songs')
+                .send(song)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    /** Insert a new song and make assertions */
-                    chai.request(app)
-                        .post('/songs')
-                        .send({
-                            name: 'Beginning 2',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 176,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status('200');
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(song.name);
+                    chai.expect(res.body.album).to.be.an('object');
+                    chai.expect(res.body.length).to.be.an('number');
+                    chai.expect(res.body.length).to.be.equal(song.length);
 
-                            chai.expect(res).to.have.status('200');
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.id).to.be.an('number');
-                            chai.expect(res.body.name).to.be.an('string');
-                            chai.expect(res.body.name).to.be.equal(
-                                'Beginning 2'
-                            );
-                            chai.expect(res.body.album).to.be.an('object');
-                            chai.expect(res.body.length).to.be.an('number');
-                            chai.expect(res.body.length).to.be.equal(176);
+                    done();
 
-                            done();
-
-                            chai.request(app)
-                                .delete('/songs/' + res.body.id)
-                                .end(() => {
-                                    chai.request(app)
-                                        .delete('/albums/' + res.body.album.id)
-                                        .end();
-                                });
-                        });
+                    song.id = res.body.id;
                 });
         });
 
@@ -336,71 +337,59 @@ describe('API Songs', function () {
                     chai.expect(res.body.error).to.be.an('string');
                     chai.expect(res.body.error).to.be.equal('Bad Request');
                     chai.expect(res.body.message).to.be.an('string');
+                    
                     done();
                 });
         });
     });
 
     describe('GET `/songs/:song_id`', function () {
+        const album = {
+            id: null,
+            name: 'GET',
+            author: 'song_id',
+        };
+
+        const song = {
+            id: null,
+            album: null,
+            name: 'GET',
+            length: 200,
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+            song.album = album;
+
+            res = await chai.request(app).post('/songs').send(song);
+
+            song.id = res.body.id;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/songs/' + song.id);
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return a song', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '200', author: 'OK' })
+                .get('/songs/' + song.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .post('/songs')
-                        .send({
-                            name: 'OK',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 200,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(song.name);
+                    chai.expect(res.body.album).to.be.an('object');
+                    chai.expect(res.body.length).to.be.an('number');
+                    chai.expect(res.body.length).to.be.equal(song.length);
 
-                            chai.request(app)
-                                .get('/songs/' + res.body.id)
-                                .end((err, res) => {
-                                    if (err) done(err);
-
-                                    chai.expect(res).to.have.status(200);
-                                    chai.expect(res).to.be.an('object');
-                                    chai.expect(res.body).to.be.an('object');
-                                    chai.expect(res.body.id).to.be.an('number');
-                                    chai.expect(res.body.name).to.be.an(
-                                        'string'
-                                    );
-                                    chai.expect(res.body.name).to.be.equal(
-                                        'OK'
-                                    );
-                                    chai.expect(res.body.album).to.be.an(
-                                        'object'
-                                    );
-                                    chai.expect(res.body.length).to.be.an(
-                                        'number'
-                                    );
-                                    chai.expect(res.body.length).to.be.equal(
-                                        200
-                                    );
-                                    done();
-
-                                    chai.request(app)
-                                        .delete('/songs/' + res.body.id)
-                                        .end(() => {
-                                            chai.request(app)
-                                                .delete(
-                                                    '/albums/' +
-                                                        res.body.album.id
-                                                )
-                                                .end();
-                                        });
-                                });
-                        });
+                    done();
                 });
         });
 
@@ -425,225 +414,142 @@ describe('API Songs', function () {
     });
 
     describe('PUT `/songs/:song_id`', function () {
+        const album = {
+            id: null,
+            name: 'PUT',
+            author: 'song_id',
+        };
+
+        const song = {
+            id: null,
+            album: null,
+            name: 'PUT',
+            length: 200,
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+            song.album = album;
+
+            res = await chai.request(app).post('/songs').send(song);
+
+            song.id = res.body.id;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/songs/' + song.id);
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return a song', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '200', author: 'OK' })
+                .put('/songs/' + song.id)
+                .send(song)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .post('/songs')
-                        .send({
-                            name: 'Bad Request',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 400,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(song.name);
+                    chai.expect(res.body.album).to.be.an('object');
+                    chai.expect(res.body.length).to.be.an('number');
+                    chai.expect(res.body.length).to.be.equal(song.length);
 
-                            chai.request(app)
-                                .put('/songs/' + res.body.id)
-                                .send({
-                                    name: 'OK',
-                                    album: {
-                                        id: res.body.album.id,
-                                        name: res.body.album.name,
-                                        author: res.body.album.author,
-                                    },
-                                    length: 200,
-                                })
-                                .end((err, res) => {
-                                    if (err) done(err);
-
-                                    chai.expect(res).to.have.status(200);
-                                    chai.expect(res).to.be.an('object');
-                                    chai.expect(res.body).to.be.an('object');
-                                    chai.expect(res.body.id).to.be.an('number');
-                                    chai.expect(res.body.name).to.be.an(
-                                        'string'
-                                    );
-                                    chai.expect(res.body.name).to.be.equal(
-                                        'OK'
-                                    );
-                                    chai.expect(res.body.album).to.be.an(
-                                        'object'
-                                    );
-                                    chai.expect(res.body.length).to.be.an(
-                                        'number'
-                                    );
-                                    chai.expect(res.body.length).to.be.equal(
-                                        200
-                                    );
-                                    done();
-
-                                    chai.request(app)
-                                        .delete('/songs/' + res.body.id)
-                                        .end(() => {
-                                            chai.request(app)
-                                                .delete(
-                                                    '/albums/' +
-                                                        res.body.album.id
-                                                )
-                                                .end();
-                                        });
-                                });
-                        });
+                    done();
                 });
         });
 
         it('should return status 400', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({
-                    name: '200',
-                    author: 'OK',
-                })
+                .put('/songs/' + song.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .post('/songs')
-                        .send({
-                            name: 'Bad Request',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 400,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(400);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.statusCode).to.be.an('number');
+                    chai.expect(res.body.statusCode).to.be.equal(400);
+                    chai.expect(res.body.error).to.be.an('string');
+                    chai.expect(res.body.error).to.be.equal('Bad Request');
+                    chai.expect(res.body.message).to.be.an('string');
 
-                            chai.request(app)
-                                .put('/songs/' + res.body.id)
-                                .end((err, res) => {
-                                    if (err) done(err);
-
-                                    chai.expect(res).to.have.status(400);
-                                    chai.expect(res).to.be.an('object');
-                                    chai.expect(res.body).to.be.an('object');
-                                    chai.expect(res.body.statusCode).to.be.an(
-                                        'number'
-                                    );
-                                    chai.expect(
-                                        res.body.statusCode
-                                    ).to.be.equal(400);
-                                    chai.expect(res.body.error).to.be.an(
-                                        'string'
-                                    );
-                                    chai.expect(res.body.error).to.be.equal(
-                                        'Bad Request'
-                                    );
-                                    chai.expect(res.body.message).to.be.an(
-                                        'string'
-                                    );
-
-                                    done();
-                                });
-
-                            chai.request(app)
-                                .delete('/songs/' + res.body.id)
-                                .end(() => {
-                                    chai.request(app)
-                                        .delete('/albums/' + res.body.album.id)
-                                        .end();
-                                });
-                        });
+                    done();
                 });
         });
 
         it('should return status 404', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({
-                    name: '404',
-                    author: 'Not Found',
-                })
+                .put('/songs/999999999')
+                .send(song)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .put('/songs/999999999')
-                        .send({
-                            name: 'Not Found',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 404,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(404);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.statusCode).to.be.an('number');
+                    chai.expect(res.body.statusCode).to.be.equal(404);
+                    chai.expect(res.body.error).to.be.an('string');
+                    chai.expect(res.body.error).to.be.equal('Not Found');
+                    chai.expect(res.body.message).to.be.an('string');
 
-                            chai.expect(res).to.have.status(404);
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.statusCode).to.be.an('number');
-                            chai.expect(res.body.statusCode).to.be.equal(404);
-                            chai.expect(res.body.error).to.be.an('string');
-                            chai.expect(res.body.error).to.be.equal(
-                                'Not Found'
-                            );
-                            chai.expect(res.body.message).to.be.an('string');
-
-                            done();
-                        });
-
-                    chai.request(app)
-                        .delete('/albums/' + res.body.id)
-                        .end();
+                    done();
                 });
         });
     });
 
     describe('DELETE `/songs/:song_id`', function () {
+        const album = {
+            id: null,
+            name: 'DELETE',
+            author: 'song_id',
+        };
+
+        const song = {
+            id: null,
+            album: null,
+            name: 'DELETE',
+            length: 200,
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+            song.album = album;
+
+            res = await chai.request(app).post('/songs').send(song);
+
+            song.id = res.body.id;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return a song', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({
-                    name: '200',
-                    author: 'OK',
-                })
+                .delete('/songs/' + song.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .post('/songs')
-                        .send({
-                            name: 'OK',
-                            album: {
-                                id: res.body.id,
-                                name: res.body.name,
-                                author: res.body.author,
-                            },
-                            length: 200,
-                        })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(song.name);
+                    chai.expect(res.body.album).to.be.an('object');
+                    chai.expect(res.body.length).to.be.an('number');
+                    chai.expect(res.body.length).to.be.equal(song.length);
 
-                            chai.request(app)
-                                .delete('/songs/' + res.body.id)
-                                .end((err, res) => {
-                                    if (err) done(err);
-
-                                    chai.expect(res).to.have.status(200);
-                                    chai.expect(res).to.be.an('object');
-                                    chai.expect(res.body).to.be.an('object');
-
-                                    done();
-
-                                    chai.request(app)
-                                        .delete('/albums/' + res.body.album.id)
-                                        .end();
-                                });
-                        });
+                    done();
                 });
         });
 
