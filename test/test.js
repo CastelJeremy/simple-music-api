@@ -21,10 +21,20 @@ describe('API Albums', function () {
     });
 
     describe('POST `/albums`', function () {
+        const album = {
+            id: null,
+            name: 'POST',
+            author: 'album',
+        };
+
+        after(async function () {
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return an album', (done) => {
             chai.request(app)
                 .post('/albums')
-                .send({ name: '418', author: 'Tea Pot' })
+                .send(album)
                 .end((err, res) => {
                     if (err) done(err);
 
@@ -33,15 +43,13 @@ describe('API Albums', function () {
                     chai.expect(res.body).to.be.an('object');
                     chai.expect(res.body.id).to.be.an('number');
                     chai.expect(res.body.name).to.be.an('string');
-                    chai.expect(res.body.name).to.be.equal('418');
+                    chai.expect(res.body.name).to.be.equal(album.name);
                     chai.expect(res.body.author).to.be.an('string');
-                    chai.expect(res.body.author).to.be.equal('Tea Pot');
+                    chai.expect(res.body.author).to.be.equal(album.author);
+
                     done();
 
-                    /** Delete the inserted album */
-                    chai.request(app)
-                        .delete('/albums/' + res.body.id)
-                        .end();
+                    album.id = res.body.id;
                 });
         });
 
@@ -57,38 +65,45 @@ describe('API Albums', function () {
                     chai.expect(res.body.statusCode).to.be.equal(400);
                     chai.expect(res.body.error).to.be.equal('Bad Request');
                     chai.expect(res.body.message).to.be.an('string');
+
                     done();
                 });
         });
     });
 
     describe('GET `/albums/:album_id`', function () {
+        const album = {
+            id: null,
+            name: 'GET',
+            author: 'album_id',
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return an album', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '200', author: 'OK' })
+                .get('/albums/' + album.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .get('/albums/' + res.body.id)
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(album.name);
+                    chai.expect(res.body.author).to.be.an('string');
+                    chai.expect(res.body.author).to.be.equal(album.author);
 
-                            chai.expect(res).to.have.status(200);
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.id).to.be.an('number');
-                            chai.expect(res.body.name).to.be.an('string');
-                            chai.expect(res.body.name).to.be.equal('200');
-                            chai.expect(res.body.author).to.be.an('string');
-                            chai.expect(res.body.author).to.be.equal('OK');
-                            done();
-
-                            chai.request(app)
-                                .delete('/albums/' + res.body.id)
-                                .end();
-                        });
+                    done();
                 });
         });
 
@@ -106,70 +121,65 @@ describe('API Albums', function () {
                     chai.expect(res.body.error).to.be.an('string');
                     chai.expect(res.body.error).to.be.equal('Not Found');
                     chai.expect(res.body.message).to.be.an('string');
+
                     done();
                 });
         });
     });
 
     describe('PUT `/albums/:album_id`', function () {
+        const album = {
+            id: null,
+            name: 'PUT',
+            author: 'album_id',
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+        });
+
+        after(async function () {
+            await chai.request(app).delete('/albums/' + album.id);
+        });
+
         it('should return an album', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '200', author: 'OK' })
+                .put('/albums/' + album.id)
+                .send(album)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .put('/albums/' + res.body.id)
-                        .send({ name: 'OK', author: '200' })
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(album.name);
+                    chai.expect(res.body.author).to.be.an('string');
+                    chai.expect(res.body.author).to.be.equal(album.author);
 
-                            chai.expect(res).to.have.status(200);
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.id).to.be.an('number');
-                            chai.expect(res.body.name).to.be.an('string');
-                            chai.expect(res.body.name).to.be.equal('OK');
-                            chai.expect(res.body.author).to.be.an('string');
-                            chai.expect(res.body.author).to.be.equal('200');
-                            done();
-
-                            chai.request(app)
-                                .delete('/albums/' + res.body.id)
-                                .end();
-                        });
+                    done();
                 });
         });
 
         it('should return status 400', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '400', author: 'Bad Request' })
+                .put('/albums/' + album.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .put('/albums/' + res.body.id)
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(400);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.statusCode).to.be.an('number');
+                    chai.expect(res.body.statusCode).to.be.equal(400);
+                    chai.expect(res.body.error).to.be.an('string');
+                    chai.expect(res.body.error).to.be.equal('Bad Request');
+                    chai.expect(res.body.message).to.be.an('string');
 
-                            chai.expect(res).to.have.status(400);
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.statusCode).to.be.an('number');
-                            chai.expect(res.body.statusCode).to.be.equal(400);
-                            chai.expect(res.body.error).to.be.an('string');
-                            chai.expect(res.body.error).to.be.equal(
-                                'Bad Request'
-                            );
-                            chai.expect(res.body.message).to.be.an('string');
-                            done();
-                        });
-
-                    chai.request(app)
-                        .delete('/albums/' + res.body.id)
-                        .end();
+                    done();
                 });
         });
 
@@ -188,34 +198,41 @@ describe('API Albums', function () {
                     chai.expect(res.body.error).to.be.an('string');
                     chai.expect(res.body.error).to.be.equal('Not Found');
                     chai.expect(res.body.message).to.be.an('string');
+
                     done();
                 });
         });
     });
 
     describe('DELETE `/albums/:album_id`', function () {
+        const album = {
+            id: null,
+            name: 'DELETE',
+            author: 'album_id',
+        };
+
+        before(async function () {
+            let res = await chai.request(app).post('/albums').send(album);
+
+            album.id = res.body.id;
+        });
+
         it('should return an album', (done) => {
             chai.request(app)
-                .post('/albums')
-                .send({ name: '200', author: 'OK' })
+                .delete('/albums/' + album.id)
                 .end((err, res) => {
                     if (err) done(err);
 
-                    chai.request(app)
-                        .delete('/albums/' + res.body.id)
-                        .end((err, res) => {
-                            if (err) done(err);
+                    chai.expect(res).to.have.status(200);
+                    chai.expect(res).to.be.an('object');
+                    chai.expect(res.body).to.be.an('object');
+                    chai.expect(res.body.id).to.be.an('number');
+                    chai.expect(res.body.name).to.be.an('string');
+                    chai.expect(res.body.name).to.be.equal(album.name);
+                    chai.expect(res.body.author).to.be.an('string');
+                    chai.expect(res.body.author).to.be.equal(album.author);
 
-                            chai.expect(res).to.have.status(200);
-                            chai.expect(res).to.be.an('object');
-                            chai.expect(res.body).to.be.an('object');
-                            chai.expect(res.body.id).to.be.an('number');
-                            chai.expect(res.body.name).to.be.an('string');
-                            chai.expect(res.body.name).to.be.equal('200');
-                            chai.expect(res.body.author).to.be.an('string');
-                            chai.expect(res.body.author).to.be.equal('OK');
-                            done();
-                        });
+                    done();
                 });
         });
 
@@ -233,6 +250,7 @@ describe('API Albums', function () {
                     chai.expect(res.body.error).to.be.an('string');
                     chai.expect(res.body.error).to.be.equal('Not Found');
                     chai.expect(res.body.message).to.be.an('string');
+
                     done();
                 });
         });
