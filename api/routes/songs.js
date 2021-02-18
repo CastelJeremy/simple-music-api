@@ -61,7 +61,7 @@ songs
 
         res.json(song.toObject());
     })
-    .put(async function (req, res) {
+    .put(async function (req, res, next) {
         if (
             typeof req.body.album != 'object' ||
             typeof req.body.album.id != 'number' ||
@@ -105,7 +105,7 @@ songs
 
         res.json(song.toObject());
     })
-    .delete(async function (req, res) {
+    .delete(async function (req, res, next) {
         const dao = new SongDAO();
         let song = await dao.get(req.params.song_id);
 
