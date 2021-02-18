@@ -21,27 +21,19 @@ class AlbumDAO {
     }
 
     async get(albumId) {
-        try {
-            const client = await DB.open();
-            const result = await client.query(
-                'SELECT * FROM album WHERE album_id = $1',
-                [albumId]
-            );
+        const client = await DB.open();
+        const result = await client.query(
+            'SELECT * FROM album WHERE album_id = $1',
+            [albumId]
+        );
 
-            return result && result.rows && result.rows[0]
-                ? new Album(
-                      result.rows[0].album_id,
-                      result.rows[0].album_name,
-                      result.rows[0].album_author
-                  )
-                : null;
-        } catch (err) {
-            /** Error if the given albumId doesn't exist in the database */
-            if (err.errno == -3001)
-                return null;
-            
-            throw err;
-        }
+        return result && result.rows && result.rows[0]
+            ? new Album(
+                  result.rows[0].album_id,
+                  result.rows[0].album_name,
+                  result.rows[0].album_author
+              )
+            : null;
     }
 
     async getAll() {
@@ -91,4 +83,4 @@ class AlbumDAO {
     }
 }
 
-export { AlbumDAO };
+export { AlbumDAO }
