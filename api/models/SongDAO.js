@@ -25,22 +25,29 @@ class SongDAO {
     }
 
     async get(songId) {
-        const client = await DB.open();
-        const result = await client.query(
-            'SELECT * FROM song WHERE song_id = $1',
-            [songId]
-        );
+        try {
+            const client = await DB.open();
+            const result = await client.query(
+                'SELECT * FROM song WHERE song_id = $1',
+                [songId]
+            );
 
-        const albumDAO = new AlbumDAO();
+            const albumDAO = new AlbumDAO();
 
-        return result && result.rows && result.rows[0]
-            ? new Song(
-                  result.rows[0].song_id,
-                  await albumDAO.get(result.rows[0].album_id),
-                  result.rows[0].song_name,
-                  result.rows[0].song_length
-              )
-            : null;
+            return result && result.rows && result.rows[0]
+                ? new Song(
+                      result.rows[0].song_id,
+                      await albumDAO.get(result.rows[0].album_id),
+                      result.rows[0].song_name,
+                      result.rows[0].song_length
+                  )
+                : null;
+        } catch (err) {
+            /** Error if the given songId doesn't exist in the database */
+            if (err.errno == -3001) return null;
+
+            throw err;
+        }
     }
 
     async getAll() {
