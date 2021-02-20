@@ -38,7 +38,7 @@ class AlbumDAO {
 
     async getAll() {
         const client = await DB.open();
-        const result = await client.query('SELECT * FROM album');
+        const result = await client.query('SELECT * FROM album ORDER BY album_id');
 
         let albums = [];
         for (let row of result.rows) {

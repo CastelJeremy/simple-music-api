@@ -43,9 +43,33 @@ class SongDAO {
             : null;
     }
 
+    async getAllByAlbum(albumId) {
+        const client = await DB.open();
+        const result = await client.query(
+            'SELECT * FROM song WHERE album_id = $1 ORDER BY song_id',
+            [albumId]
+        );
+
+        const albumDAO = new AlbumDAO();
+
+        let songs = [];
+        for (let row of result.rows) {
+            songs.push(
+                new Song(
+                    row.song_id,
+                    await albumDAO.get(row.album_id),
+                    row.song_name,
+                    row.song_length
+                )
+            );
+        }
+
+        return songs;
+    }
+
     async getAll() {
         const client = await DB.open();
-        const result = await client.query('SELECT * FROM song');
+        const result = await client.query('SELECT * FROM song ORDER BY song_id');
 
         const albumDAO = new AlbumDAO();
 

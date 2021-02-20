@@ -40,8 +40,15 @@ songs
         res.json(song.toObject());
     })
     .get(async function (req, res) {
+        const { album_id } = req.query;
+        
         let dao = new SongDAO();
-        let songs = await dao.getAll();
+        let songs = [];
+        if (album_id) {
+            songs = await dao.getAllByAlbum(album_id);
+        } else {
+            songs = await dao.getAll();
+        }
 
         res.json(songs.map((song) => song.toObject()));
     });
