@@ -1,8 +1,4 @@
-import express from 'express';
-
-const router = express.Router();
-
-router.use((req, res, next) => {
+function logHandler(req, res, next) {
     const today = new Date();
     const date = {
         year: today.getFullYear(),
@@ -15,7 +11,8 @@ router.use((req, res, next) => {
     console.log(
         `${date.year}-${date.month}-${date.day} ${date.hours}:${date.minutes} - Something is happening at: ${req.originalUrl}`
     );
+    
     next();
-});
+}
 
-export { router };
+export { logHandler };

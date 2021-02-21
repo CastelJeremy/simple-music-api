@@ -1,6 +1,6 @@
-import { DB } from '../DB.js';
+import { DB } from './DB.js';
 import { AlbumDAO } from './AlbumDAO.js';
-import { Song } from '../schemas/Song.js';
+import { Song } from '../models/Song.js';
 
 class SongDAO {
     constructor() {}

@@ -1,17 +1,16 @@
 import express from 'express';
-import { router } from './api/router.js';
-import { albums } from './api/routes/albums.js';
-import { songs } from './api/routes/songs.js';
-import { notFoundError, errorHandler } from './api/errorHandler.js';
+import routes from './routes/index.js';
+import { logHandler } from './system/logHandler.js';
+import { notFoundError, errorHandler } from './system/errorHandler.js';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.use('/', router);
-app.use('/albums', albums);
-app.use('/songs', songs);
+app.use(logHandler);
+
+app.use('/', routes);
 
 app.use('*', (req, res, next) =>
     next(notFoundError(`No endpoint found that matches '${req.originalUrl}'`))
