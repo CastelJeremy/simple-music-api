@@ -1,8 +1,11 @@
 import express from 'express';
+import login from './api/login.js';
 import album from './api/album.js';
 import song from './api/song.js';
 
 const routes = express.Router();
+
+routes.route('/login').post(login.postLogin);
 
 routes.route('/albums').post(album.postAlbum).get(album.getAlbums);
 routes
