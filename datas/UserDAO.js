@@ -7,7 +7,7 @@ class UserDAO {
     async get(userId) {
         const client = await DB.open();
         const result = await client.query(
-            'SELECT * FROM user WHERE user_id = $1',
+            'SELECT * FROM "user" WHERE user_id = $1',
             [userId]
         );
 
@@ -23,7 +23,7 @@ class UserDAO {
     async getByUsername(userUsername) {
         const client = await DB.open();
         const result = await client.query(
-            'SELECT * FROM user WHERE user_username = $1',
+            'SELECT * FROM "user" WHERE user_username = $1',
             [userUsername]
         );
 
