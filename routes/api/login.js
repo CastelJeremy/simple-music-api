@@ -5,8 +5,6 @@ import { queryParamError } from '../../system/errorHandler.js';
 async function postLogin(req, res, next) {
     const { username, password } = req.body;
 
-    console.log(req.headers);
-
     if (typeof username != 'string' || typeof password != 'string')
         return next(
             queryParamError(

@@ -9,6 +9,17 @@ function queryParamError(msg) {
     };
 }
 
+function unauthorizedError(msg) {
+    return {
+        statusCode: 401,
+        payload: {
+            statusCode: 401,
+            error: 'Unauthorized',
+            message: msg,
+        },
+    };
+}
+
 function notFoundError(msg) {
     return {
         statusCode: 404,
@@ -33,4 +44,4 @@ function errorHandler(err, req, res, next) {
     }
 }
 
-export { queryParamError, notFoundError, errorHandler };
+export { queryParamError, unauthorizedError, notFoundError, errorHandler };
