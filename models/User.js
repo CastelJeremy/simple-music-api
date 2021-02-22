@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+
 class User {
     constructor(id, username, password) {
         this._id = id;
@@ -15,7 +17,10 @@ class User {
     getPassword() { return this._password; }
 
     checkPassword(password) {
-        return this._password == password;
+        const hash = crypto.createHash('sha256');
+        hash.update(password);
+
+        return this._password == hash.digest('hex');
     }
 
     toObject() {
