@@ -1,0 +1,4 @@
+site_name: SimpleMusic API
+nav:
+ - 'index.md'
+theme: readthedocs
