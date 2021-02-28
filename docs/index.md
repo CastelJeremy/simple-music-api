@@ -1,43 +1,66 @@
 # Welcome to SimpleMusic API
 
-Securely store songs and albums in a postgres database. Access those songs and albums with simple HTTP requests.
+SimpleMusic API is a Rest API built with [Express.js](http://expressjs.com), [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme) and [node-postgres](https://github.com/brianc/node-postgres). It offers a set of routes secured with a Bearer token to execute CRUD methods.
 
-Made with [Express.js](http://expressjs.com), [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme) and [node-postgres](https://github.com/brianc/node-postgres).
+## Requirements
 
-## Introduction
+Before installing the API make sure
 
-SimpleMusic API uses HTTP request to create, read, edit and delete data from the database. If you want to execute those requests, you must get an access-token.
+-   Your nodejs configuration supports ECMAScript 6 features.
+-   A Postgresql database is setup.
 
-### Token
+## Setting up the database
 
-An access-token is given in response of a POST request on the `http://host/login` endpoint with a valid user in the body.
+Use the following SQL script to create the required database format:
 
-```bash
-curl -d '{"username":"demo_username", "password":"demo_password"}' -H "Content-Type: application/json" -X POST http://host/login
+```sql
+CREATE TABLE public.album (
+    album_id serial PRIMARY KEY,
+    album_name character varying(100) NOT NULL,
+    album_author character varying(100) NOT NULL
+);
+
+CREATE TABLE public.song (
+    song_id serial PRIMARY KEY,
+    album_id integer NOT NULL,
+    song_name character varying(100) NOT NULL,
+    song_length integer NOT NULL,
+    CONSTRAINT album_song_fk
+        FOREIGN KEY (album_id)
+            REFERENCES public.album(album_id)
+);
+
+CREATE TABLE public."user" (
+    user_id serial PRIMARY KEY,
+    user_username character varying(20) NOT NULL UNIQUE,
+    user_password character varying(64) NOT NULL
+);
 ```
 
-```json
-// Response Body
-{
-    "access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-}
-```
+## Installation
 
-### Token Usage
+1. **Clone the project repository**  
+   `git clone https://github.com/CastelJeremy/simple-music-api.git /project/directory`
 
-With this access-token, you can now execute different requests to manipulate your data.
+2. **Run npm install**  
+   `npm install`
 
-```bash
-curl -H "Authorization: Bearer <ACCESS_TOKEN>" http://host/albums
-```
+3. **Configure the database connection**  
+   Edit 'datas/DB.js'.  
+   Change the pg.Pool parameters to match your Postgres configuration.
 
-```json
-// Response Body
-[
-    { "id": 879, "name": "First Album", "author": "Jeremy CASTEL" },
-    { "id": 884, "name": "Second Album", "author": "Jeremy CASTEL" }
-]
-```
+4. **Configure the host and port**  
+   Edit 'app.js'.  
+   Change the app.listen parameters to fit your needs.
+
+5. **Test the API** \*_Optionnal_  
+   Make sure devDependencies are installed.  
+   Make sure there is a default user with:  
+   username = demo_username and password = demo_password.  
+   `npm run test`
+
+6. **Start the API**  
+   `npm run start`
 
 ## Author
 

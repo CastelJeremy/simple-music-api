@@ -1,4 +1,7 @@
 site_name: SimpleMusic API
 nav:
  - 'index.md'
+ - 'auth.md'
+ - 'routes.md'
 theme: readthedocs
+extra_css: [extra.css]
