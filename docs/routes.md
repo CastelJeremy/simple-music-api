@@ -1,6 +1,8 @@
 # Routes
 
-Routes simplify the modification of data. They respect different HTTP Methods to execute CRUD methods. They are self-explanatory but further detail is given below.
+Routes respects different HTTP Methods for CRUD execution. POST to create, GET to read, PUT to update and DELETE to delete.
+
+Every routes is secured and requires a valid token except the `/login` route which provides an authentification endpoint.
 
 ## Overview
 
@@ -14,6 +16,7 @@ List of available routes and methods:
 | /songs            | POST, GET        | YES           |
 | /songs/:song_id   | GET, PUT, DELETE | YES           |
 
+<br>
 ## Requests
 
 POST and PUT methods requires json objects in the request. POST will create the object and PUT update an existing object. The PUT won't create a new object and requires a valid object (eg: sending only the name of the album will return an error).
@@ -57,9 +60,11 @@ The following list displays the expected request body foreach POST and PUT.
 
 ## Responses
 
-If your request is correctly executed, the body of the response will show performed changes. However if your request is invalid you will receive an [error](#errors).
+If your request is correctly executed, the body of the response will show performed changes. However if your request is invalid you will receive an [Error](#errors).
 
 The following list displays examples of response.
+
+---
 
 **Login**
 
@@ -70,44 +75,56 @@ The following list displays examples of response.
 }
 ```
 
+---
+
 **Albums**
 
 ```json
 // POST
 {
     "id": 885,
-    "name": "Third Album",
-    "author": "First Author"
-}
-
-// GET
-[
-    { "id": 879, "name": "First Album", "author": "First Author" },
-    { "id": 884, "name": "Second Album", "author": "Second Author" },
-    { "id": 885, "name": "Third Album", "author": "First Author" }
-]
-
-// GET
-{
-    "id": 884,
-    "name": "Second Album",
-    "author": "Second Author"
-}
-
-// PUT
-{
-    "id": 884,
-    "name": "Second Album",
-    "author": "Third Author"
-}
-
-// DELETE
-{
-    "id": 884,
-    "name": "Second Album",
-    "author": "Third Author"
+    "name": "DOOM 2016 Soundtrack",
+    "author": "Mick Gordon"
 }
 ```
+
+```json
+// GET
+[
+    { "id": 879, "name": "Minecraft - Volume Alpha", "author": "C418" },
+    { "id": 884, "name": "Minecraft - Volume Beta", "author": "C418" },
+    { "id": 885, "name": "DOOM 2016 Soundtrack", "author": "Mick Gordon" }
+]
+```
+
+```json
+// GET :album_id
+{
+    "id": 885,
+    "name": "DOOM 2016 Soundtrack",
+    "author": "Mick Gordon"
+}
+```
+
+```json
+// PUT :album_id
+{
+    "id": 885,
+    "name": "DOOM 2016 - Soundtrack",
+    "author": "Mick Gordon"
+}
+```
+
+```json
+// DELETE :album_id
+{
+    "id": 885,
+    "name": "DOOM 2016 - Soundtrack",
+    "author": "Mick Gordon"
+}
+```
+
+---
 
 **Songs**
 
@@ -119,7 +136,9 @@ The following list displays examples of response.
     "name": "Beginning 2",
     "length": 176
 }
+```
 
+```json
 // GET
 [
     {
@@ -141,24 +160,30 @@ The following list displays examples of response.
         "length": 176
     }
 ]
+```
 
-// GET
+```json
+// GET :song_id
 {
     "id": 396,
     "album": { "id": 884, "name": "Minecraft - Volume Beta", "author": "C418" },
     "name": "Beginning 2",
     "length": 176
 }
+```
 
-// PUT
+```json
+// PUT :song_id
 {
     "id": 396,
     "album": { "id": 884, "name": "Minecraft - Volume Beta", "author": "C418" },
     "name": "Beginning 2",
     "length": 176
 }
+```
 
-// DELETE
+```json
+// DELETE :song_id
 {
     "id": 396,
     "album": { "id": 884, "name": "Minecraft - Volume Beta", "author": "C418" },
@@ -171,11 +196,11 @@ The following list displays examples of response.
 
 If something goes wrong, the response will contain an error. The API handles 3 different types of errors:
 
--   _Bad Request_, if the body of your request doesn't respect the expected format [More details](#requests).
+-   _Bad Request_, if the body of your request doesn't respect the expected format. ([Routes#Requests](#requests))
 -   _Unauthorized_, if you didn't provide a valid Bearer token for a secured route or if your token has expired.
 -   _Not Found_, the requested id could not be found in the database.
 
-Response containing an error:
+Example of a response displaying an error:
 
 ```json
 {
@@ -185,7 +210,7 @@ Response containing an error:
 }
 ```
 
-List of possible errors, the priority is the order the api will check. If your request does not respect the expected format and the token has expired, the unauthorized error will be returned.
+List of possible errors:
 
 | statusCode | error        | Priority |
 | ---------- | ------------ | -------- |
@@ -193,7 +218,12 @@ List of possible errors, the priority is the order the api will check. If your r
 | 401        | Unauthorized | 1        |
 | 404        | Not Found    | 3        |
 
-List of possible messages for the Bad Request error.
+<br>
+Priorities defines which error should be returned if multiple errors occurs.  
+(eg: a POST on /albums without a valid token and a valid request will return **Error 401**).  
+(eg: a PUT on /albums without a valid request and an unknow album_id will return **Error 400**).
+
+List of possible messages for the _Bad Request_ error.
 
 ```txt
  - Missing or invalid parameters for POST '/login'. Expecting username as string and password as string.
@@ -201,7 +231,7 @@ List of possible messages for the Bad Request error.
  - Missing or invalid parameters for PUT '/songs'. Expecting album as object, name as string and length as number.
 ```
 
-List of possible messages for the Not Found error.
+List of possible messages for the _Not Found_ error.
 
 ```txt
  - No album found that matches the ID 9999
