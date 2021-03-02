@@ -1,4 +1,4 @@
-# Simple Music API
+# Welcome to SimpleMusic API
 
 SimpleMusic API is a Rest API built with [Express.js](http://expressjs.com), [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme) and [node-postgres](https://github.com/brianc/node-postgres). It offers a set of routes secured with a Bearer token to execute CRUD methods.
 
@@ -57,11 +57,22 @@ CREATE TABLE public."user" (
    Make sure devDependencies are installed.  
    Make sure there is a default user with:  
    username = demo_username and password = demo_password.  
+   Comment the **app.use(logHandler);** instruction in **app.js** to hide logs.  
    `npm run test`
 
 6. **Start the API**  
    `npm run start`
 
+## Documentation
+
+An extensive documentation made with [MkDocs](https://www.mkdocs.org/) is available in this repository.
+
+-   `mkdocs build`  
+    Build the documentation and output the result in **/project_directory/site/**.
+
+-   `mkdocs serve`  
+    Serve the documentation on [http://localhost:8000](http://localhost:8000)
+
 ## Author
 
--   CASTEL Jeremy
+[CASTEL Jeremy](https://github.com/CastelJeremy)
