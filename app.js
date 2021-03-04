@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes/index.js';
+import { corsHandler } from './system/corsHandler.js';
 import { logHandler } from './system/logHandler.js';
 import { notFoundError, errorHandler } from './system/errorHandler.js';
 
@@ -10,7 +11,7 @@ app.use(express.json());
 
 app.use(logHandler);
 
-app.use('/', routes);
+app.use('/', corsHandler(), routes);
 
 app.use('*', (req, res, next) =>
     next(notFoundError(`No endpoint found that matches '${req.originalUrl}'`))
