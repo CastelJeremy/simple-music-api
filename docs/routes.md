@@ -163,6 +163,24 @@ The following list displays examples of response.
 ```
 
 ```json
+// GET ?album_id=879
+[
+    {
+        "id": 354,
+        "album": { "id": 879, "name": "Minecraft - Volume Alpha", "author": "C418" },
+        "name": "Key",
+        "length": 65
+    },
+    {
+        "id": 371,
+        "album": { "id": 879, "name": "Minecraft - Volume Alpha", "author": "C418" },
+        "name": "Sweden",
+        "length": 215
+    }
+]
+```
+
+```json
 // GET :song_id
 {
     "id": 396,
