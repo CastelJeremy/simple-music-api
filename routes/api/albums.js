@@ -1,6 +1,10 @@
 import { Album } from '../../models/Album.js';
 import { AlbumDAO } from '../../datas/AlbumDAO.js';
-import { queryParamError, notFoundError } from '../../system/errorHandler.js';
+import {
+    queryParamError,
+    notFoundError,
+    internalServerError,
+} from '../../system/errorHandler.js';
 
 async function postAlbum(req, res, next) {
     if (typeof req.body.name != 'string' || typeof req.body.author != 'string')
@@ -75,7 +79,15 @@ async function deleteAlbum(req, res, next) {
             )
         );
 
-    album = await dao.delete(album);
+    try {
+        album = await dao.delete(album);
+    } catch (err) {
+        if (err.code && err.code === '23503') {
+            return next(internalServerError(`Can not delete an album containing songs`));
+        } else {
+            return next(internalServerError());
+        }
+    }
 
     res.json(album.toObject());
 }

@@ -69,7 +69,9 @@ class SongDAO {
 
     async getAll() {
         const client = await DB.open();
-        const result = await client.query('SELECT * FROM song ORDER BY song_id');
+        const result = await client.query(
+            'SELECT * FROM song ORDER BY song_id'
+        );
 
         const albumDAO = new AlbumDAO();
 

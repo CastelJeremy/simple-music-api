@@ -55,8 +55,7 @@ CREATE TABLE public."user" (
 
 5. **Test the API** \*_Optionnal_  
    Make sure devDependencies are installed.  
-   Make sure there is a default user with:  
-   username = demo_username and password = demo_password.  
+   Make sure the default user in _fixtures.sql_ has been inserted.  
    Comment the **app.use(logHandler);** instruction in **app.js** to hide logs.  
    `npm run test`
 

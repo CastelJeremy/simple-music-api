@@ -31,6 +31,17 @@ function notFoundError(msg) {
     };
 }
 
+function internalServerError(msg = 'Something has gone wrong on our end please try again') {
+    return {
+        statusCode: 500,
+        payload: {
+            statusCode: 500,
+            error: 'Internal Server Error',
+            message: msg,
+        }
+    }
+}
+
 function errorHandler(err, req, res, next) {
     if (err.statusCode && err.payload) {
         res.status(err.statusCode);
@@ -44,4 +55,4 @@ function errorHandler(err, req, res, next) {
     }
 }
 
-export { queryParamError, unauthorizedError, notFoundError, errorHandler };
+export { queryParamError, unauthorizedError, notFoundError, internalServerError, errorHandler };
