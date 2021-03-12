@@ -32,6 +32,23 @@ describe('API Songs', function () {
                         done();
                     });
             });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .get('/songs')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
         });
 
         describe('POST', function () {
@@ -120,6 +137,23 @@ describe('API Songs', function () {
                         done();
                     });
             });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .post('/songs')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
         });
     });
 
@@ -197,6 +231,23 @@ describe('API Songs', function () {
                     });
             });
 
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .get('/songs/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
+
             it('should return status 404', (done) => {
                 chai.request(app)
                     .get('/songs/999999999')
@@ -261,6 +312,23 @@ describe('API Songs', function () {
                     });
             });
 
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .put('/songs/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
+
             it('should return status 404', (done) => {
                 chai.request(app)
                     .put('/songs/999999999')
@@ -300,6 +368,23 @@ describe('API Songs', function () {
                         chai.expect(res.body.album).to.be.an('object');
                         chai.expect(res.body.length).to.be.an('number');
                         chai.expect(res.body.length).to.be.equal(song.length);
+
+                        done();
+                    });
+            });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .delete('/songs/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
 
                         done();
                     });
