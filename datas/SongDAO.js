@@ -51,16 +51,12 @@ class SongDAO {
         );
 
         const albumDAO = new AlbumDAO();
+        const album = await albumDAO.get(row.album_id);
 
         let songs = [];
         for (let row of result.rows) {
             songs.push(
-                new Song(
-                    row.song_id,
-                    await albumDAO.get(row.album_id),
-                    row.song_name,
-                    row.song_length
-                )
+                new Song(row.song_id, album, row.song_name, row.song_length)
             );
         }
 
@@ -74,13 +70,18 @@ class SongDAO {
         );
 
         const albumDAO = new AlbumDAO();
+        let albums = {};
 
         let songs = [];
         for (let row of result.rows) {
+            if (!albums[row.album_id]) {
+                albums[row.album_id] = await albumDAO.get(row.album_id);
+            }
+
             songs.push(
                 new Song(
                     row.song_id,
-                    await albumDAO.get(row.album_id),
+                    albums[row.album_id],
                     row.song_name,
                     row.song_length
                 )
