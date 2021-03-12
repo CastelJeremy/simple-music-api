@@ -28,6 +28,24 @@ describe('API Albums', function () {
                         chai.expect(res).to.have.status(200);
                         chai.expect(res).to.be.an('object');
                         chai.expect(res.body).to.be.an('array');
+
+                        done();
+                    });
+            });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .get('/albums')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
                         done();
                     });
             });
@@ -89,6 +107,23 @@ describe('API Albums', function () {
                         done();
                     });
             });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .post('/albums')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
         });
     });
 
@@ -138,6 +173,23 @@ describe('API Albums', function () {
                         chai.expect(res.body.name).to.be.equal(album.name);
                         chai.expect(res.body.author).to.be.an('string');
                         chai.expect(res.body.author).to.be.equal(album.author);
+
+                        done();
+                    });
+            });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .get('/albums/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
 
                         done();
                     });
@@ -206,6 +258,23 @@ describe('API Albums', function () {
                     });
             });
 
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .put('/albums/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
+
+                        done();
+                    });
+            });
+
             it('should return status 404', (done) => {
                 chai.request(app)
                     .put('/albums/999999999')
@@ -244,6 +313,23 @@ describe('API Albums', function () {
                         chai.expect(res.body.name).to.be.equal(album.name);
                         chai.expect(res.body.author).to.be.an('string');
                         chai.expect(res.body.author).to.be.equal(album.author);
+
+                        done();
+                    });
+            });
+
+            it('should return status 401', (done) => {
+                chai.request(app)
+                    .delete('/albums/999999999')
+                    .end((err, res) => {
+                        if (err) done(err);
+
+                        chai.expect(res).to.have.status(401);
+                        chai.expect(res).to.be.an('object');
+                        chai.expect(res.body).to.be.an('object');
+                        chai.expect(res.body.statusCode).to.be.equal(401);
+                        chai.expect(res.body.error).to.be.equal('Unauthorized');
+                        chai.expect(res.body.message).to.be.an('string');
 
                         done();
                     });
