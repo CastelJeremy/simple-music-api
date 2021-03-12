@@ -45,22 +45,62 @@ CREATE TABLE public."user" (
 2. **Run npm install**  
    `npm install`
 
-3. **Configure the database connection**  
-   Edit 'datas/DB.js'.  
-   Change the pg.Pool parameters to match your Postgres configuration.
+## Configuration
 
-4. **Configure the host and port**  
-   Edit 'app.js'.  
-   Change the app.listen parameters to fit your needs.
+The `.env` available in the project directory must be configured in order to test and run the api.
+Example of a correct .env configuration :
 
-5. **Test the API** \*_Optionnal_  
-   Make sure devDependencies are installed.  
-   Make sure the default user in _fixtures.sql_ has been inserted.  
-   Comment the **app.use(logHandler);** instruction in **app.js** to hide logs.  
-   `npm run test`
+```txt
+DB_HOST = example.com
+DB_PORT = 5432
+DB_NAME = db_demo
+DB_USER = user1
+DB_PASS = 1234
+APP_HOST = 127.0.0.1
+APP_PORT = 8000
+ENV = prod
+```
 
-6. **Start the API**  
-   `npm run start`
+## Testing
+
+If you which to test the API make sure :
+
+1.  devDependencies are installed `npm install --save-dev`.
+2.  the demo user is in your database, check the `fixtures.sql` file.
+
+Then run the following command:
+
+```bash
+npm run test
+```
+
+Expected result:
+
+```txt
+        ...
+        ✓ should return status 401
+        ✓ should return status 404 (109ms)
+      DELETE
+        ✓ should return a song (206ms)
+        ✓ should return status 401
+        ✓ should return status 404 (56ms)
+
+
+  32 passing (3s)
+
+```
+
+## Running
+
+_\*Testing the api is optionnal but highly recommended_
+
+Run the following command:
+
+```
+npm run start
+```
+
+If you are on a linux server, configuring a .service file is recommended.
 
 ## Documentation
 
