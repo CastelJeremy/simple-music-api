@@ -31,7 +31,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(logHandler);
+if (process.env.ENV === 'prod') app.use(logHandler);
 
 app.use('/', corsHandler(), routes);
 
