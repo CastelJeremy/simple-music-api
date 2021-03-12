@@ -63,7 +63,7 @@ ENV = prod
 
 ## Testing
 
-If you which to test the API make sure :
+If you wish to test the API make sure :
 
 1.  devDependencies are installed `npm install --save-dev`.
 2.  the demo user is in your database, check the `fixtures.sql` file.
