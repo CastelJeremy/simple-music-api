@@ -8,11 +8,11 @@ class DB {
     static async open() {
         if (DB.client === null) {
             const pool = new pg.Pool({
-                user: 'user',
-                host: 'host',
-                database: 'db_name',
-                password: 'password',
-                port: 5432,
+                user: process.env.DB_USER,
+                host: process.env.DB_HOST,
+                database: process.env.DB_NAME,
+                password: process.env.DB_PASS,
+                port: process.env.DB_PORT,
             });
 
             DB.client = await pool.connect();
