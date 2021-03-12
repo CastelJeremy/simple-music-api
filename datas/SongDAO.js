@@ -51,10 +51,14 @@ class SongDAO {
         );
 
         const albumDAO = new AlbumDAO();
-        const album = await albumDAO.get(row.album_id);
+        let album = null;
 
         let songs = [];
         for (let row of result.rows) {
+            if (!album) {
+                album = await albumDAO.get(row.album_id);
+            }
+
             songs.push(
                 new Song(row.song_id, album, row.song_name, row.song_length)
             );
