@@ -3,5 +3,6 @@ nav:
  - 'index.md'
  - 'auth.md'
  - 'routes.md'
+ - 'technical.md'
 theme: readthedocs
 extra_css: [extra.css]
