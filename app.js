@@ -43,7 +43,10 @@ app.use(errorHandler);
 
 const server = app.listen(APP_PORT, APP_HOST, () => {
     const { address, port } = server.address();
-    console.log(`Hello world app listening on port http://${address}:${port}!`);
+
+    console.log(
+        `SimpleMusic API - v1.0 listening on port http://${address}:${port}!`
+    );
 });
 
 export { app };
