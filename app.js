@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './routes/index.js';
+import routes from './routes/routes.js';
 import { corsHandler } from './system/corsHandler.js';
 import { logHandler } from './system/logHandler.js';
 import { notFoundError, errorHandler } from './system/errorHandler.js';
